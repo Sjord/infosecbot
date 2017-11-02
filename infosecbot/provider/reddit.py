@@ -1,5 +1,6 @@
-from webclient import webclient
-from storage import storage
+from infosecbot.webclient import webclient
+from infosecbot.storage import storage
+from infosecbot.model import Link
 
 default_reddits = ['crypto', 'netsec', 'hacking']
 default_sort = 'new'
@@ -19,7 +20,7 @@ def gather_urls(reddits=None, sort=None):
     last_id = storage["reddit"]["last_id"]
     links = get_links(last_id, reddits, sort)
     children = [c['data'] for c in links['data']['children']]
-    return [c for c in children if not c['is_self']]
+    return [Link(c) for c in children if not c['is_self']]
 
 
 if __name__ == "__main__":
