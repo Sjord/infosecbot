@@ -2,7 +2,7 @@
 from textblob.classifiers import NaiveBayesClassifier
 import pickle
 import sys
-import provider.reddit as reddit
+import infosecbot.provider.reddit as reddit
 
 def learn_basic():
     train = []

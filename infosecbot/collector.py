@@ -1,6 +1,7 @@
 import infosecbot.provider.reddit as reddit
 import infosecbot.provider.hackernews as hackernews
 from infosecbot.classifier import load_classifier
+from infosecbot.storage import storage
 
 def collect_links():
     providers = [reddit, hackernews]
@@ -17,3 +18,6 @@ def collect_links():
 if __name__ == "__main__":
     for l in collect_links():
         print(l)
+        storage['urls'].append(l)
+    
+    storage.save()
