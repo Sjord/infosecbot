@@ -3,6 +3,7 @@ from textblob.classifiers import NaiveBayesClassifier
 import pickle
 import sys
 import infosecbot.provider.reddit as reddit
+from infosecbot.storage import storage
 
 def learn_basic():
     train = []
@@ -40,11 +41,17 @@ def save_classifier(cl):
         pickle.dump(cl, fp) 
 
 
-if __name__ == "__main__":
-    # learn_basic()
-    cl = load_classifier()
-    cl.update(learn_reddit())
-    save_classifier(cl)
+def learn_links(cl):
+    train = []
+    for link in storage['links']:
+        if link.score != link.learned_at_score and link.score != 0:
+            train.append((link.title, link.score > 0))
+            link.learned_at_score = link.score
+    return train
 
-    if False:
-        print(cl.classify(sys.argv[1]))
+
+if __name__ == "__main__":
+    cl = load_classifier()
+    cl.update(learn_links(cl))
+    save_classifier(cl)
+    storage.save()

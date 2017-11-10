@@ -21,6 +21,11 @@ class Link:
             self.score = data['score']
         except KeyError:
             self.score = 0
+
+        try:
+            self.learned_at_score = data['learned_at_score']
+        except KeyError:
+            self.learned_at_score = None
         
         parsed_url = urlparse(self.url)
         self.domain = parsed_url.hostname
