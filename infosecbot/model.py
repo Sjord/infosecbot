@@ -1,5 +1,11 @@
 
 from urllib.parse import urlparse
+import hashlib
+
+
+def hash_url(url):
+    return hashlib.sha256(url.encode()).hexdigest()[0:16]
+
 
 class Link:
     def __init__(self, data):
@@ -9,8 +15,7 @@ class Link:
         try:
             self.id = data['id']
         except KeyError:
-            import hashlib
-            self.id = hashlib.sha256(self.url.encode()).hexdigest()[0:16]
+            self.id = hash_url(self.url)
 
         try:
             self.score = data['score']
