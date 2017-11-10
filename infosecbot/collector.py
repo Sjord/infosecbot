@@ -18,6 +18,6 @@ def collect_links():
 if __name__ == "__main__":
     for l in collect_links():
         print(l)
-        storage['urls'].append(l)
+        storage['links'].append(l)
     
     storage.save()

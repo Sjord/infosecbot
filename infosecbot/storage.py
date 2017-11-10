@@ -7,7 +7,7 @@ class Storage(dict):
     def __init__(self):
         with open(datafile, 'r') as fp:
             self.update(json.load(fp))
-        self['urls'] = [Link(u) for u in self['urls']]
+        self['links'] = [Link(u) for u in self['links']]
 
     def save(self):
         serialized = json.dumps(dict(self), default=self.serialize)
@@ -16,6 +16,11 @@ class Storage(dict):
 
     def serialize(self, obj):
         return obj.__dict__
+
+    def get_link(self, id):
+        matches = [l for l in self['links'] if l.id == id]
+        assert len(matches) == 1
+        return matches[0]
         
 
 storage = Storage()
