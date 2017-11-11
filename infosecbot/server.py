@@ -4,6 +4,8 @@ from infosecbot.storage import storage
 from html import escape
 	  
 class LinkController(object):
+    show_link_count = 50
+
     def link_to_html(self, link):
         return """<div>
             <a href="%s">%s (%d)</a>
@@ -16,9 +18,13 @@ class LinkController(object):
         
     @cherrypy.expose
     def index(self):
+        count = 0
         response = ""
-        for link in storage['links']:
+        for link in reversed(storage['links']):
             response += self.link_to_html(link)
+            count += 1
+            if count >= self.show_link_count:
+                break
         return response
 
     @cherrypy.expose
