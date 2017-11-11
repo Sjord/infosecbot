@@ -1,5 +1,8 @@
-from storage import storage
+from infosecbot.storage import storage
 import tweepy
+from infosecbot.webclient import webclient
+from bs4 import BeautifulSoup
+from infosecbot.model import Link
 
 def get_tweepy_api():
     consumer_key = storage['twitter']['consumer_key']
@@ -12,16 +15,23 @@ def get_tweepy_api():
     api = tweepy.API(auth)
     return api
 
-def get_links():
+def retrieve_title(url):
+    html = webclient.get(url).content
+    soup = BeautifulSoup(html, 'html.parser')
+    return soup.title.string
+
+def gather_urls():
     api = get_tweepy_api()
     public_tweets = api.home_timeline()
     links = []
     for t in public_tweets:
         for url in [u['expanded_url'] for u in t.entities['urls']]:
-            links.append({
+            title = retrieve_title(url)
+            links.append(Link({
                 "url": url,
+                "title": title,
                 # "by": t.user
-            })
+            }))
     return links
 
 
