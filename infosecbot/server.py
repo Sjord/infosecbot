@@ -20,6 +20,7 @@ class LinkController(object):
     def index(self):
         count = 0
         response = ""
+        storage.load()
         for link in reversed(storage['links']):
             response += self.link_to_html(link)
             count += 1

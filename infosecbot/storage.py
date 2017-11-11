@@ -5,6 +5,9 @@ datafile = 'data.json'
 
 class Storage(dict):
     def __init__(self):
+        self.load()
+
+    def load(self):
         with open(datafile, 'r') as fp:
             self.update(json.load(fp))
         self['links'] = [Link(u) for u in self['links']]

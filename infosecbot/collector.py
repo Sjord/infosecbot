@@ -16,8 +16,7 @@ class SeenIt:
 
 
 def collect_links():
-    # providers = [reddit, hackernews, twitter]
-    providers = [twitter]
+    providers = [reddit, hackernews, twitter]
     classifier = load_classifier()
     seenit = SeenIt()
 

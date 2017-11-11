@@ -26,12 +26,15 @@ def gather_urls():
     links = []
     for t in public_tweets:
         for url in [u['expanded_url'] for u in t.entities['urls']]:
-            title = retrieve_title(url)
-            links.append(Link({
-                "url": url,
-                "title": title,
-                # "by": t.user
-            }))
+            try:
+                title = retrieve_title(url)
+                links.append(Link({
+                    "url": url,
+                    "title": title,
+                    # "by": t.user
+                }))
+            except Exception as e:
+                print(e)
     return links
 
 
