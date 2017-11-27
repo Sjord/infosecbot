@@ -26,7 +26,7 @@ def gather_urls():
     for id in ids:
         story = get_story(id)
         if 'url' in story:
-            yield Link(story)
+            yield Link(story['url'], story['title'])
 
 
 if __name__ == "__main__":

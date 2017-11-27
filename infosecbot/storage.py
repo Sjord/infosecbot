@@ -10,7 +10,7 @@ class Storage(dict):
     def load(self):
         with open(datafile, 'r') as fp:
             self.update(json.load(fp))
-        self['links'] = [Link(u) for u in self['links']]
+        self['links'] = [Link.unserialize(u) for u in self['links']]
 
     def save(self):
         serialized = json.dumps(dict(self), default=self.serialize)

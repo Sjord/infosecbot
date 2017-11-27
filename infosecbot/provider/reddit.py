@@ -20,7 +20,7 @@ def gather_urls(reddits=None, sort=None):
     last_id = storage["reddit"]["last_id"]
     links = get_links(last_id, reddits, sort)
     children = [c['data'] for c in links['data']['children']]
-    return [Link(c) for c in children if not c['is_self']]
+    return [Link(c['url'], c['title']) for c in children if not c['is_self']]
 
 
 if __name__ == "__main__":

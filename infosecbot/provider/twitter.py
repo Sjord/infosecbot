@@ -22,21 +22,18 @@ def retrieve_title(url):
 
 def gather_urls():
     api = get_tweepy_api()
-    public_tweets = api.home_timeline()
+    public_tweets = api.home_timeline(tweet_mode="extended")
     links = []
     for t in public_tweets:
         for url in [u['expanded_url'] for u in t.entities['urls']]:
             try:
                 title = retrieve_title(url)
-                links.append(Link({
-                    "url": url,
-                    "title": title,
-                    # "by": t.user
-                }))
+                links.append(Link(url, title))
             except Exception as e:
                 print(e)
     return links
 
 
 if __name__ == "__main__":
-    print(get_links())
+    for u in gather_urls():
+        print(u)
