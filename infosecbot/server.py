@@ -35,4 +35,6 @@ class LinkController(object):
         storage.save()
         raise cherrypy.HTTPRedirect("/")
 
+
+cherrypy.config.update("server.conf")
 cherrypy.quickstart(LinkController())
