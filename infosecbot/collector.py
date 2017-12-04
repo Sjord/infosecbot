@@ -24,7 +24,7 @@ def collect_links():
         links = p.gather_urls()
         for link in links:
             if not seenit.seen(link.url):
-                is_infosec = classifier.classify(link.title)
+                is_infosec = classifier.classify(link)
                 if is_infosec:
                     yield link
 
@@ -34,4 +34,4 @@ if __name__ == "__main__":
         print(l)
         storage['links'].append(l)
     
-    storage.save()
+    # storage.save()

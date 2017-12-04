@@ -2,3 +2,6 @@ requests
 tweepy
 textblob
 cherrypy
+scikit-learn
+numpy
+scipy

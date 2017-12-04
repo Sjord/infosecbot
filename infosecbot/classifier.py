@@ -1,57 +1,40 @@
 
-from textblob.classifiers import NaiveBayesClassifier
-import pickle
-import sys
-import infosecbot.provider.reddit as reddit
+from sklearn.naive_bayes import BernoulliNB
+from sklearn.feature_extraction.text import HashingVectorizer
 from infosecbot.storage import storage
-
-def learn_basic():
-    train = []
-    with open('../positive.txt') as fp:
-        for line in fp:
-            train.append((line, True))
-
-    with open('../negative.txt') as fp:
-        for line in fp:
-            train.append((line, False))
-
-    cl = NaiveBayesClassifier(train)
-
-
-def learn_reddit():
-    train = []
-    spam = reddit.gather_urls(["worldnews", "programmerhumor"], "top")
-    for s in spam:
-        train.append((s['title'], False))
-
-    spam = reddit.gather_urls(None, "top")
-    for s in spam:
-        train.append((s['title'], True))
-
-    return train
 
 
 def load_classifier():
-    with open('classifier.pickle', 'rb') as fp:
-        return pickle.load(fp)
+    classifier = InfosecClassifier()
+    classifier.learn(storage["links"])
+    return classifier
 
 
-def save_classifier(cl):
-    with open('classifier.pickle', 'wb') as fp:
-        pickle.dump(cl, fp) 
+def get_link_text(link):
+    return " ".join((link.title.lower(), link.domain.replace(".", " ")))
 
 
-def learn_links(cl):
-    train = []
-    for link in storage['links']:
-        if link.score != link.learned_at_score and link.score != 0:
-            train.append((link.title, link.score > 0))
-            link.learned_at_score = link.score
-    return train
+class InfosecClassifier:
+    def __init__(self):
+        self.bernoulli = BernoulliNB()
+        self.vectorizer = HashingVectorizer(preprocessor=get_link_text)
+
+    def learn(self, links):
+        links = [link for link in links if link.score != 0 and link.score != link.learned_at_score]
+        classifications = [link.score > 0 for link in links]
+        features = self.vectorizer.fit_transform(links, classifications)
+        self.bernoulli.fit(features, classifications)
+
+    def classify(self, link):
+        features = self.vectorizer.fit_transform([link])
+        return self.bernoulli.predict(features)
 
 
 if __name__ == "__main__":
-    cl = load_classifier()
-    cl.update(learn_links(cl))
-    save_classifier(cl)
-    storage.save()
+    c = InfosecClassifier()
+    c.learn(storage["links"])
+    l = storage["links"][0]
+    res = c.classify(l)
+    print(l, res)
+   
+
