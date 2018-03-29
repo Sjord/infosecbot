@@ -2,3 +2,4 @@ requests
 tweepy
 textblob
 cherrypy
+beautifulsoup4
