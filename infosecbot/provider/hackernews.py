@@ -25,7 +25,7 @@ def gather_urls():
         storage["hackernews"]["last_id"] = max(ids)
     for id in ids:
         story = get_story(id)
-        if 'url' in story:
+        if story is not None and 'url' in story:
             yield Link(story['url'], story['title'])
 
 
