@@ -1,6 +1,7 @@
 
 from urllib.parse import urlparse
 import hashlib
+from datetime import datetime, timezone
 
 
 def hash_url(url):
@@ -20,6 +21,7 @@ class Link:
         self.id = hash_url(url)
         self.score = 0
         self.learned_at_score = None
+        self.created = datetime.now(timezone.utc)
 
         parsed_url = urlparse(self.url)
         self.domain = parsed_url.hostname
@@ -32,7 +34,17 @@ class Link:
         self.score = data['score']
         self.learned_at_score = data['learned_at_score']
         self.domain = data['domain']
+        self.created = data.get('created')
+        if self.created is not None:
+            self.created = datetime.fromtimestamp(self.created, timezone.utc)
+            print("unserialized", self.created)
         return self
+
+    def serialize(self):
+        result = self.__dict__
+        if result['created'] is not None:
+            result['created'] = result['created'].timestamp()
+        return result
     
     def __str__(self):
         return "%s <%s>" % (self.title, self.url)

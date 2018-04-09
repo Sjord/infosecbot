@@ -18,7 +18,7 @@ class Storage(dict):
             fp.write(serialized)
 
     def serialize(self, obj):
-        return obj.__dict__
+        return obj.serialize()
 
     def get_link(self, id):
         matches = [l for l in self['links'] if l.id == id]
