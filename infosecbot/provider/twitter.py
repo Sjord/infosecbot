@@ -18,7 +18,7 @@ def get_tweepy_api():
 def retrieve_title(url):
     html = webclient.get(url).content
     soup = BeautifulSoup(html, 'html.parser')
-    return soup.title.string
+    return soup.title.string.strip()
 
 def gather_urls():
     api = get_tweepy_api()
