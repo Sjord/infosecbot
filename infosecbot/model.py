@@ -9,6 +9,12 @@ def hash_url(url):
 
 class Link:
     def __init__(self, url, title):
+        if not url:
+            raise ValueError("url")
+
+        if not title:
+            raise ValueError("title")
+
         self.title = title
         self.url = url
         self.id = hash_url(url)
