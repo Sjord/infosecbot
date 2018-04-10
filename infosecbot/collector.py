@@ -30,8 +30,12 @@ def collect_links():
 
 
 if __name__ == "__main__":
+    new_links = []
+
     for l in collect_links():
         print(l)
+        new_links.append(l)
         storage['links'].append(l)
     
     storage.save()
+    twitter.handle_new_links(new_links)

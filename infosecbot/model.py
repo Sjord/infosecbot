@@ -37,7 +37,6 @@ class Link:
         self.created = data.get('created')
         if self.created is not None:
             self.created = datetime.fromtimestamp(self.created, timezone.utc)
-            print("unserialized", self.created)
         return self
 
     def serialize(self):
@@ -47,4 +46,4 @@ class Link:
         return result
     
     def __str__(self):
-        return "%s <%s>" % (self.title, self.url)
+        return "%s %s" % (self.title, self.url)

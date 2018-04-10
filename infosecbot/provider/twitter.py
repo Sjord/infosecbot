@@ -3,6 +3,7 @@ import tweepy
 from infosecbot.webclient import webclient
 from bs4 import BeautifulSoup
 from infosecbot.model import Link
+import random
 
 def get_tweepy_api():
     consumer_key = storage['twitter']['consumer_key']
@@ -32,6 +33,17 @@ def gather_urls():
             except Exception as e:
                 print(e)
     return links
+
+def handle_new_links(links):
+    if not links:
+        return
+
+    if random.choice([False] + [True] * 10):
+        return
+
+    link = random.choice(links)
+    api = get_tweepy_api()
+    api.update_status(str(link))
 
 
 if __name__ == "__main__":
