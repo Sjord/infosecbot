@@ -2,7 +2,7 @@ from infosecbot.storage import storage
 import tweepy
 from infosecbot.model import Link
 import random
-from infosecbot.webpage import retrieve_title
+from infosecbot.webpage import retrieve
 
 
 def get_tweepy_api():
@@ -23,8 +23,8 @@ def gather_urls():
     for t in public_tweets:
         for url in [u['expanded_url'] for u in t.entities['urls']]:
             try:
-                title = retrieve_title(url)
-                links.append(Link(url, title))
+                page = retrieve(url)
+                links.append(Link(page.url, page.title))
             except Exception as e:
                 print(e)
     return links
