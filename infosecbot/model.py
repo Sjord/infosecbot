@@ -25,6 +25,7 @@ class Link:
 
         parsed_url = urlparse(self.url)
         self.domain = parsed_url.hostname
+        self.scheme = parsed_url.scheme
 
 
     @classmethod
