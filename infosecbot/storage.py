@@ -24,6 +24,13 @@ class Storage(dict):
         matches = [l for l in self['links'] if l.id == id]
         assert len(matches) == 1
         return matches[0]
+
+    def find_link_by_url(self, url):
+        matches = [l for l in self['links'] if l.url== url]
+        assert len(matches) <= 1
+        if not matches:
+            return None
+        return matches[0]
         
 
 storage = Storage()

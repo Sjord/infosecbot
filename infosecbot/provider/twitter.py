@@ -1,9 +1,9 @@
 from infosecbot.storage import storage
 import tweepy
-from infosecbot.webclient import webclient
-from bs4 import BeautifulSoup
 from infosecbot.model import Link
 import random
+from infosecbot.webpage import retrieve_title
+
 
 def get_tweepy_api():
     consumer_key = storage['twitter']['consumer_key']
@@ -15,11 +15,6 @@ def get_tweepy_api():
     auth.set_access_token(access_token, access_token_secret)
     api = tweepy.API(auth)
     return api
-
-def retrieve_title(url):
-    html = webclient.get(url).content
-    soup = BeautifulSoup(html, 'html.parser')
-    return soup.title.string.strip()
 
 def gather_urls():
     api = get_tweepy_api()
