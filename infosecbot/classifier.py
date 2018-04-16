@@ -60,6 +60,16 @@ def initialize_classifier():
 
 if __name__ == "__main__":
     cl = load_classifier()
-    cl.learn(get_learnable_links())
-    save_classifier(cl)
-    storage.save()
+
+    action = sys.argv[1]
+    if action == "show":
+        cl.bayes.show_informative_features(n=100)
+    elif action == "init":
+        cl = initialize_classifier()
+        save_classifier(cl)
+    elif action == "update":
+        cl.learn(get_learnable_links())
+        save_classifier(cl)
+        storage.save()
+    else:
+        raise ValueError("action")

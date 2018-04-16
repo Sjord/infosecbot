@@ -3,6 +3,7 @@ import infosecbot.provider.hackernews as hackernews
 import infosecbot.provider.twitter as twitter
 from infosecbot.classifier import load_classifier
 from infosecbot.storage import storage
+import sys
 
 
 class SeenIt:
@@ -38,4 +39,6 @@ if __name__ == "__main__":
         storage['links'].append(l)
     
     storage.save()
-    twitter.handle_new_links(new_links)
+
+    if "tweet" in sys.argv:
+        twitter.handle_new_links(new_links)
