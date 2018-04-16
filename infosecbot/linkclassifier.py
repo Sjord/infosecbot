@@ -6,7 +6,7 @@ class LinkClassifier:
         
     def link_to_text(self, link):
         domain_words = re.sub(r'[^a-z]+', ' ', link.domain)
-        return link.title + " " + domain_words + " " + link.scheme
+        return link.title.lower() + " " + domain_words + " " + link.scheme
 
     def learn(self, links):
         train = []
