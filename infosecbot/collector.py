@@ -9,10 +9,12 @@ import sys
 class SeenIt:
     def __init__(self):
         self.seen_urls = set([l.url for l in storage['links']])
+        self.seen_titles = set([l.title for l in storage['links']])
 
-    def seen(self, url):
-        seen = url in self.seen_urls
-        self.seen_urls.add(url)
+    def seen(self, link):
+        seen = link.url in self.seen_urls or link.title in self.seen_titles
+        self.seen_urls.add(link.url)
+        self.seen_titles.add(link.title)
         return seen
 
 
@@ -24,7 +26,7 @@ def collect_links():
     for p in providers:
         links = p.gather_urls()
         for link in links:
-            if not seenit.seen(link.url):
+            if not seenit.seen(link):
                 is_infosec = classifier.classify(link)
                 if is_infosec:
                     yield link
