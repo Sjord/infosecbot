@@ -33,7 +33,7 @@ def handle_new_links(links):
     if not links:
         return
 
-    if random.choice([False] + [True] * 10):
+    if random.choice([False] + [True] * 6):
         return
 
     link = random.choice(links)
