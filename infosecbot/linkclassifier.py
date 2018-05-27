@@ -17,4 +17,5 @@ class LinkClassifier:
         self.bayes.update(train)
 
     def classify(self, link):
-        return self.bayes.classify(self.link_to_text(link))
+        probdist = self.bayes.prob_classify(self.link_to_text(link))
+        return probdist.prob(True)

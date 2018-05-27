@@ -64,6 +64,10 @@ if __name__ == "__main__":
     action = sys.argv[1]
     if action == "show":
         cl.bayes.show_informative_features(n=100)
+
+        for link in storage['links'][0:100]:
+            prob = cl.classify(link)
+            print(link, prob)
     elif action == "init":
         cl = initialize_classifier()
         save_classifier(cl)

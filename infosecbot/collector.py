@@ -27,8 +27,15 @@ def collect_links():
         links = p.gather_urls()
         for link in links:
             if not seenit.seen(link):
-                is_infosec = classifier.classify(link)
-                if is_infosec:
+                prob = classifier.classify(link)
+                link.infosec_probability = prob
+
+                # Autovote
+                if prob > 0.999:
+                    link.score += 1
+
+                # We consider high scores as infosec posts
+                if prob > 0.9:
                     yield link
 
 
