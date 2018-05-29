@@ -11,10 +11,10 @@ def hash_url(url):
 class Link:
     def __init__(self, url, title):
         if not url:
-            raise ValueError("url")
+            raise ValueError("empty url")
 
         if not title:
-            raise ValueError("title")
+            raise ValueError("empty title")
 
         self.title = title
         self.url = url
@@ -26,6 +26,9 @@ class Link:
         parsed_url = urlparse(self.url)
         self.domain = parsed_url.hostname
         self.scheme = parsed_url.scheme
+
+        if self.domain is None:
+            raise ValueError("invalid url")
 
 
     @classmethod
