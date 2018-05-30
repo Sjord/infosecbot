@@ -1,6 +1,7 @@
 from infosecbot.webclient import webclient
 from infosecbot.storage import storage
 from infosecbot.model import Link, Source
+from html import unescape
 
 default_reddits = ['crypto', 'netsec', 'hacking']
 default_sort = 'new'
@@ -22,7 +23,8 @@ def gather_urls(reddits=None, sort=None):
     children = [c['data'] for c in links['data']['children']]
     for c in children:
         if not c['is_self']:
-            yield Link(c['url'], c['title'], Source("reddit", c["id"]))
+            title = unescape(c["title"])
+            yield Link(c['url'], title, Source("reddit", c["id"]))
 
 
 if __name__ == "__main__":
