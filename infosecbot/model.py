@@ -8,8 +8,16 @@ def hash_url(url):
     return hashlib.sha256(url.encode()).hexdigest()[0:16]
 
 
+class Source:
+    def __init__(self, source, id):
+        self.source = source
+        self.id = id
+
+    def serialize(self):
+        return self.__dict__
+
 class Link:
-    def __init__(self, url, title):
+    def __init__(self, url, title, source):
         if not url:
             raise ValueError("empty url")
 
@@ -18,6 +26,7 @@ class Link:
 
         self.title = title
         self.url = url
+        self.source = source
         self.id = hash_url(url)
         self.score = 0
         self.learned_at_score = None
@@ -33,7 +42,7 @@ class Link:
 
     @classmethod
     def unserialize(cls, data):
-        self = cls(data['url'], data['title'])
+        self = cls(data['url'], data['title'], data.get('source'))
         self.id = data['id']
         self.score = data['score']
         self.learned_at_score = data['learned_at_score']

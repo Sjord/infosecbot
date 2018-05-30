@@ -1,6 +1,6 @@
 from infosecbot.storage import storage
 import tweepy
-from infosecbot.model import Link
+from infosecbot.model import Link, Source
 import random
 from infosecbot.webpage import retrieve
 
@@ -24,7 +24,8 @@ def gather_urls():
         for url in [u['expanded_url'] for u in t.entities['urls']]:
             try:
                 page = retrieve(url)
-                links.append(Link(page.url, page.title))
+                source = Source("twitter", t.id)
+                links.append(Link(page.url, page.title, source))
             except Exception as e:
                 print(e)
     return links

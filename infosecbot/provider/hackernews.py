@@ -1,6 +1,6 @@
 from infosecbot.webclient import webclient
 from infosecbot.storage import storage
-from infosecbot.model import Link
+from infosecbot.model import Link, Source
 
 newstories_url = 'https://hacker-news.firebaseio.com/v0/newstories.json'
 item_url = 'https://hacker-news.firebaseio.com/v0/item/%d.json'
@@ -26,7 +26,7 @@ def gather_urls():
     for id in ids:
         story = get_story(id)
         if story is not None and 'url' in story:
-            yield Link(story['url'], story['title'])
+            yield Link(story['url'], story['title'], Source("hackernews", id))
 
 
 if __name__ == "__main__":
