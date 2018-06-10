@@ -4,18 +4,25 @@ import infosecbot.provider.twitter as twitter
 from infosecbot.classifier import load_classifier
 from infosecbot.storage import storage
 import sys
+import re
 
 
 class SeenIt:
     def __init__(self):
-        self.seen_urls = set([l.url for l in storage['links']])
+        self.seen_urls = set([self.canonicalize(l.url) for l in storage['links']])
         self.seen_titles = set([l.title for l in storage['links']])
 
     def seen(self, link):
-        seen = link.url in self.seen_urls or link.title in self.seen_titles
-        self.seen_urls.add(link.url)
+        canon_url = self.canonicalize(link.url)
+        seen = canon_url in self.seen_urls or link.title in self.seen_titles
+        self.seen_urls.add(canon_url)
         self.seen_titles.add(link.title)
         return seen
+
+    def canonicalize(self, url):
+        url = re.sub(r"[&?]utm_.*", "", url)
+        url = re.sub(r"[&?/]$", "", url)
+        return url
 
 
 def collect_links():
