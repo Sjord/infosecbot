@@ -14,9 +14,19 @@ def retrieve_title(url):
 class Webpage:
     pass
 
+def parse_canonical(html):
+    soup = BeautifulSoup(html, 'html.parser')
+    canonical_url = soup.select_one("link[rel='canonical']").attrs["href"]
+    return canonical_url
+
 def retrieve(url):
     response = webclient.get(url)
     result = Webpage()
     result.title = parse_title(response.content)
-    result.url = response.url
+
+    try:
+        result.url = parse_canonical(response.content)
+    except:
+        result.url = response.url
+
     return result
