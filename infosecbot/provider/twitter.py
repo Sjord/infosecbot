@@ -25,7 +25,8 @@ def gather_urls():
             try:
                 page = retrieve(url)
                 source = Source("twitter", t.id)
-                links.append(Link(page.url, page.title, source))
+                if not page.url.startswith("https://twitter.com/"):
+                    links.append(Link(page.url, page.title, source))
             except Exception as e:
                 print(e)
     return links
