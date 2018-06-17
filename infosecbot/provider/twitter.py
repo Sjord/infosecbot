@@ -5,6 +5,10 @@ import random
 from infosecbot.webpage import retrieve
 
 
+def is_twitter_url(url):
+    return url.startswith("https://twitter.com/") or url.startswith("https://mobile.twitter.com/")
+
+
 def get_tweepy_api():
     consumer_key = storage['twitter']['consumer_key']
     consumer_secret = storage['twitter']['consumer_secret']
@@ -25,7 +29,7 @@ def gather_urls():
             try:
                 page = retrieve(url)
                 source = Source("twitter", t.id)
-                if not page.url.startswith("https://twitter.com/"):
+                if not is_twitter_url(page.url):
                     links.append(Link(page.url, page.title, source))
             except Exception as e:
                 print(e)
