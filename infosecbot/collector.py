@@ -20,32 +20,52 @@ class SeenIt:
 
 def collect_links():
     providers = [reddit, hackernews, twitter]
-    classifier = load_classifier()
     seenit = SeenIt()
 
     for p in providers:
         links = p.gather_urls()
         for link in links:
             if not seenit.seen(link):
-                prob = classifier.classify(link)
-                link.infosec_probability = prob
+                yield(link)
 
-                # Autovote
-                if prob > 0.999:
-                    link.score += 1
 
-                # We consider high scores as infosec posts
-                if prob > 0.9:
-                    yield link
+def classify(link):
+    classifier = load_classifier()
+    prob = classifier.classify(link)
+    link.infosec_probability = prob
+    return prob
+
+
+def autovote(link):
+    prob = link.infosec_probability
+    assert(prob)
+
+    if prob > 0.999:
+        link.score += 1
+        return True
+
+    if prob < 0.01:
+        link.score -= 1
+        return True
+
+    return False
+
+
+def is_probably_infosec(link):
+    print(link, link.infosec_probability)
+    return link.infosec_probability > 0.9
 
 
 if __name__ == "__main__":
     new_links = []
 
     for l in collect_links():
-        print(l)
-        new_links.append(l)
-        storage['links'].append(l)
+        classify(l)
+        voted = autovote(l)
+        if voted or is_probably_infosec(l):
+            storage['links'].append(l)
+            if is_probably_infosec(l):
+                new_links.append(l)
     
     storage.save()
 
