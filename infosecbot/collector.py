@@ -44,7 +44,7 @@ def autovote(link):
         link.score += 1
         return True
 
-    if prob < 0.01:
+    if prob < 0.002:
         link.score -= 1
         return True
 
@@ -52,7 +52,6 @@ def autovote(link):
 
 
 def is_probably_infosec(link):
-    print(link, link.infosec_probability)
     return link.infosec_probability > 0.9
 
 
