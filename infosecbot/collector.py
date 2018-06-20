@@ -3,6 +3,7 @@ import infosecbot.provider.hackernews as hackernews
 import infosecbot.provider.twitter as twitter
 from infosecbot.classifier import load_classifier
 from infosecbot.storage import storage
+from infosecbot.lockfile import LockFile
 import sys
 
 
@@ -56,19 +57,20 @@ def is_probably_infosec(link):
 
 
 if __name__ == "__main__":
-    new_links = []
+    with LockFile():
+        new_links = []
 
-    try:
-        for l in collect_links():
-            classify(l)
-            voted = autovote(l)
-            if voted or is_probably_infosec(l):
-                storage['links'].append(l)
-                if is_probably_infosec(l):
-                    new_links.append(l)
-    finally:
-        storage.save()
-        raise
+        try:
+            for l in collect_links():
+                classify(l)
+                voted = autovote(l)
+                if voted or is_probably_infosec(l):
+                    storage['links'].append(l)
+                    if is_probably_infosec(l):
+                        new_links.append(l)
+        finally:
+            storage.save()
+            raise
 
-    if "tweet" in sys.argv:
-        twitter.handle_new_links(new_links)
+        if "tweet" in sys.argv:
+            twitter.handle_new_links(new_links)
