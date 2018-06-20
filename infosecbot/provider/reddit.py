@@ -7,7 +7,7 @@ default_reddits = ['crypto', 'netsec', 'hacking']
 default_sort = 'new'
 
 
-def get_links(id, reddits, sort):
+def get_links(reddits, sort):
     reddit_url = "https://www.reddit.com/r/%s/%s/.json" % ("+".join(reddits), sort)
     response = webclient.get(reddit_url)
     response.raise_for_status()
@@ -18,8 +18,7 @@ def gather_urls(reddits=None, sort=None):
     reddits = reddits or default_reddits
     sort = sort or default_sort
 
-    last_id = storage["reddit"]["last_id"]
-    links = get_links(last_id, reddits, sort)
+    links = get_links(reddits, sort)
     children = [c['data'] for c in links['data']['children']]
     for c in children:
         if not c['is_self']:
