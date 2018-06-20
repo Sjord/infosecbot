@@ -70,7 +70,6 @@ if __name__ == "__main__":
                         new_links.append(l)
         finally:
             storage.save()
-            raise
 
         if "tweet" in sys.argv:
             twitter.handle_new_links(new_links)
