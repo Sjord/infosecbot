@@ -1,5 +1,6 @@
 import json
 from infosecbot.model import Link
+from fcntl import flock, LOCK_SH, LOCK_EX
 
 datafile = 'data.json'
 
@@ -9,12 +10,14 @@ class Storage(dict):
 
     def load(self):
         with open(datafile, 'r') as fp:
+            flock(fp, LOCK_SH)
             self.update(json.load(fp))
         self['links'] = [Link.unserialize(u) for u in self['links']]
 
     def save(self):
         serialized = json.dumps(dict(self), default=self.serialize)
         with open(datafile, 'w') as fp:
+            flock(fp, LOCK_EX)
             fp.write(serialized)
 
     def serialize(self, obj):
