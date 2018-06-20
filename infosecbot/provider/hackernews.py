@@ -9,7 +9,7 @@ item_url = 'https://hacker-news.firebaseio.com/v0/item/%d.json'
 def newstories_ids(last_id):
     response = webclient.get(newstories_url)
     response.raise_for_status()
-    return [id for id in response.json() if id > last_id]
+    return sorted([id for id in response.json() if id > last_id])
 
 
 def get_story(id):
@@ -21,9 +21,8 @@ def get_story(id):
 def gather_urls():
     last_id = storage["hackernews"]["last_id"]
     ids = newstories_ids(last_id)
-    if ids:
-        storage["hackernews"]["last_id"] = max(ids)
     for id in ids:
+        storage["hackernews"]["last_id"] = id
         story = get_story(id)
         if story is not None and 'url' in story:
             yield Link(story['url'], story['title'], Source("hackernews", id))
