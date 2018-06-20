@@ -44,7 +44,7 @@ def autovote(link):
         link.score += 1
         return True
 
-    if prob < 0.002:
+    if prob < 0.001:
         link.score -= 1
         return True
 
