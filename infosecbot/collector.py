@@ -4,6 +4,7 @@ import infosecbot.provider.twitter as twitter
 from infosecbot.classifier import load_classifier
 from infosecbot.storage import storage
 from infosecbot.lockfile import LockFile
+from random import randrange
 import sys
 
 
@@ -45,7 +46,7 @@ def autovote(link):
         link.score += 1
         return True
 
-    if prob < 0.001:
+    if prob < 0.001 and randrange(100) == 0:
         link.score -= 1
         return True
 
