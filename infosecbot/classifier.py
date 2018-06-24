@@ -2,10 +2,7 @@ from nltk import NaiveBayesClassifier
 import nltk
 from infosecbot.storage import storage
 import re
-
-
-def link_features(link, words, prop):
-    return {w: w in link.__dict__[prop] for w in words}
+from random import shuffle
 
 
 def load_words(wordfile):
@@ -16,54 +13,36 @@ def load_words(wordfile):
     return words
 
 
+def get_link_features(link):
+    features = {"title-" + w: re.search(r"\b"+w+r"\b", link.title.lower()) is not None for w in titlewords}
+    return features
+
+
 def load_bayes():
-    words = load_words("titlewords.txt")
     feature_sets = []
     for link in storage['links']:
         if link.score != 0:
-            features = {w: re.search(r"\b"+w+r"\b", link.title.lower()) is not None for w in words}
+            features = get_link_features(link)
             feature_sets.append((features, link.score > 0))
-    train_set = feature_sets[0::2]
-    test_set = feature_sets[1::2]
-    bayes = NaiveBayesClassifier.train(train_set)
-    print(nltk.classify.accuracy(bayes, test_set))
 
-def load_bayes2():
-    words = load_words("domainwords.txt")
-    feature_sets = []
-    for link in storage['links']:
-        if link.score != 0:
-            features = {w: w in link.domain for w in words}
-            feature_sets.append((features, link.score > 0))
-    train_set = feature_sets[0::2]
-    test_set = feature_sets[1::2]
-    bayes = NaiveBayesClassifier.train(train_set)
-    print(nltk.classify.accuracy(bayes, test_set))
-
-
-def load_bayes3(titlewords):
-    # titlewords = load_words("titlewords.txt")
-    domainwords = load_words("domainwords.txt")
-    feature_sets = []
-    for link in storage['links']:
-        if link.score != 0:
-            features = {"domain-" + w: w in link.domain for w in domainwords}
-            features.update({"title-" + w: re.search(r"\b"+w+r"\b", link.title.lower()) is not None for w in titlewords})
-            features["is-https"] = link.url.startswith("https:")
-            feature_sets.append((features, link.score > 0))
+    shuffle(feature_sets)
     train_set = feature_sets[0::2]
     test_set = feature_sets[1::2]
     bayes = NaiveBayesClassifier.train(train_set)
     return nltk.classify.accuracy(bayes, test_set)
 
 
+def get_false_positives(bayes):
+    for l in storage['links']:
+        if l.score < 0 and bayes.prob_classify(get_link_features(l)).prob(True) > 0.9:
+            print(l)
 
-
-    
+def get_false_negatives(bayes):
+    for l in storage['links']:
+        if l.score > 0 and bayes.prob_classify(get_link_features(l)).prob(True) < 0.1:
+            print(l)
 
 
 if __name__ == "__main__":
     titlewords = load_words("titlewords.txt")
-    print(load_bayes3(titlewords))
-    for i in range(len(titlewords)):
-        print(load_bayes3(titlewords[0:i] + titlewords[i+1:]), titlewords[i])
+    print(load_bayes())
