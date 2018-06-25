@@ -25,7 +25,10 @@ def gather_urls():
         storage["hackernews"]["last_id"] = id
         story = get_story(id)
         if story is not None and 'url' in story:
-            yield Link(story['url'], story['title'], Source("hackernews", id))
+            try:
+                yield Link.from_url(story['url'], Source("hackernews", id))
+            except Exception as e:
+                print(story["url"], e)
 
 
 if __name__ == "__main__":

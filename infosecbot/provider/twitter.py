@@ -27,12 +27,11 @@ def gather_urls():
     for t in public_tweets:
         for url in [u['expanded_url'] for u in t.entities['urls']]:
             try:
-                page = retrieve(url)
-                source = Source("twitter", t.id)
-                if not is_twitter_url(page.url):
-                    links.append(Link(page.url, page.title, source))
+                link = Link.from_url(url, Source("twitter", t.id))
+                if not is_twitter_url(link.url):
+                    links.append(link)
             except Exception as e:
-                print(e)
+                print(url, e)
     return links
 
 def handle_new_links(links):
