@@ -1,8 +1,6 @@
 from nltk import NaiveBayesClassifier
-import nltk
 from infosecbot.storage import storage
 import re
-from random import shuffle
 
 
 def load_words(wordfile):
@@ -13,36 +11,24 @@ def load_words(wordfile):
     return words
 
 
-def get_link_features(link):
-    features = {"title-" + w: re.search(r"\b"+w+r"\b", link.title.lower()) is not None for w in titlewords}
-    return features
+class LinkFeatureExtractor:
+    def __init__(self):
+        self.words = load_words("titlewords.txt")
+
+    def get_link_features(self, link):
+        return {"title-" + w: re.search(r"\b"+w+r"\b", link.title.lower()) is not None for w in self.words}
 
 
-def load_bayes():
-    feature_sets = []
-    for link in storage['links']:
-        if link.score != 0:
-            features = get_link_features(link)
-            feature_sets.append((features, link.score > 0))
+class LinkClassifier:
+    def __init__(self, links=None):
+        if links is None:
+            links = storage['links']
 
-    shuffle(feature_sets)
-    train_set = feature_sets[0::2]
-    test_set = feature_sets[1::2]
-    bayes = NaiveBayesClassifier.train(train_set)
-    return nltk.classify.accuracy(bayes, test_set)
+        self.extractor = LinkFeatureExtractor()
+        feature_sets = ((self.extractor.get_link_features(l), l.score > 0) for l in links if l.score != 0)
+        self.bayes = NaiveBayesClassifier.train(feature_sets)
 
-
-def get_false_positives(bayes):
-    for l in storage['links']:
-        if l.score < 0 and bayes.prob_classify(get_link_features(l)).prob(True) > 0.9:
-            print(l)
-
-def get_false_negatives(bayes):
-    for l in storage['links']:
-        if l.score > 0 and bayes.prob_classify(get_link_features(l)).prob(True) < 0.1:
-            print(l)
-
-
-if __name__ == "__main__":
-    titlewords = load_words("titlewords.txt")
-    print(load_bayes())
+    def classify(self, link):
+        prob = self.bayes.prob_classify(self.extractor.get_link_features(link)).prob(True)
+        return prob
+        

@@ -1,7 +1,7 @@
 import infosecbot.provider.reddit as reddit
 import infosecbot.provider.hackernews as hackernews
 import infosecbot.provider.twitter as twitter
-from infosecbot.classifier import load_classifier
+from infosecbot.classifier import LinkClassifier 
 from infosecbot.storage import storage
 from infosecbot.lockfile import LockFile
 from random import randrange
@@ -31,13 +31,6 @@ def collect_links():
                 yield(link)
 
 
-def classify(link):
-    classifier = load_classifier()
-    prob = classifier.classify(link)
-    link.infosec_probability = prob
-    return prob
-
-
 def autovote(link):
     prob = link.infosec_probability
     assert(prob)
@@ -60,10 +53,11 @@ def is_probably_infosec(link):
 if __name__ == "__main__":
     with LockFile():
         new_links = []
+        classifier = LinkClassifier()
 
         try:
             for l in collect_links():
-                classify(l)
+                l.infosec_probability = classifier.classify(l)
                 voted = autovote(l)
                 if voted or is_probably_infosec(l):
                     storage['links'].append(l)
