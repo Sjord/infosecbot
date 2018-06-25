@@ -1,5 +1,5 @@
 requests
 tweepy
-textblob
+nltk
 cherrypy
 beautifulsoup4
