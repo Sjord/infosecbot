@@ -3,6 +3,7 @@ from urllib.parse import urlparse
 import hashlib
 from datetime import datetime, timezone
 from infosecbot.webpage import retrieve
+from infosecbot.wordfile import load_words
 
 
 def hash_url(url):
@@ -16,6 +17,21 @@ class Source:
 
     def serialize(self):
         return self.__dict__
+
+
+class Blacklist:
+    def __init__(self):
+        self.prefixes = load_words("urlblacklist.txt")
+
+    def contains(self, url):
+        for prefix in self.prefixes:
+            if url.startswith(prefix):
+                return True
+        return False
+
+
+blacklist = Blacklist()
+
 
 class Link:
     def __init__(self, url, source):
@@ -41,7 +57,14 @@ class Link:
         if url.endswith(".pdf"):
             raise ValueError("PDF")
 
+        if blacklist.contains(url):
+            raise ValueError("url is blacklisted")
+
         webpage = retrieve(url)
+
+        if blacklist.contains(webpage.url):
+            raise ValueError("url is blacklisted")
+
         self = cls(webpage.url, source)
         self.title = webpage.title
         self.description = webpage.description

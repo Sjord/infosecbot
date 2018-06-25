@@ -1,14 +1,7 @@
 from nltk import NaiveBayesClassifier
 from infosecbot.storage import storage
+from infosecbot.wordfile import load_words
 import re
-
-
-def load_words(wordfile):
-    words = []
-    with open(wordfile) as fp:
-        for line in fp:
-            words.append(line.strip())
-    return words
 
 
 class LinkFeatureExtractor:
