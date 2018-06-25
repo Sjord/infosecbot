@@ -20,9 +20,7 @@ arbitrary
 arno
 arstechnica
 atom
-attack
-attackers
-attacks
+attack(s|ed|ers|ing)?
 audit
 auditor
 authentication
@@ -128,9 +126,7 @@ error
 escalation
 etsy
 execution
-exploitation
-exploited
-exploits?
+exploit(s|ed|ation)?
 exploring
 expose[ds]?
 exposure
@@ -154,6 +150,7 @@ found
 framework
 free
 full
+fuzz(ing)?
 game
 games
 generated
@@ -271,6 +268,7 @@ policy
 positive
 potential
 powershell
+[po]wn(ed|ing|age)?
 privacy
 private
 privileges?
@@ -283,7 +281,6 @@ protect
 protection
 proxies
 public
-pwn(ed|ing|age)?
 python
 radare2?
 rails
@@ -297,6 +294,7 @@ reading
 records?
 recovery
 redirect
+reflect(ed|ing)?
 remote(ly)?
 rendering
 report(ed|ing)?
@@ -348,8 +346,7 @@ ssrf
 stack
 startup
 stay
-steal
-stealing
+steal(ing)?
 stolen?
 story
 stripe
