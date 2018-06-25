@@ -80,6 +80,11 @@ class Link:
         self.domain = data['domain']
         self.created = data.get('created')
         self.description = data.get('description')
+
+        source_dict = data.get('source')
+        if source_dict is not None:
+            self.source = Source(source_dict['source'], source_dict['id'])
+
         if self.created is not None:
             self.created = datetime.fromtimestamp(self.created, timezone.utc)
         return self

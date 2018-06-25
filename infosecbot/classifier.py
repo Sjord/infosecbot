@@ -9,7 +9,14 @@ class LinkFeatureExtractor:
         self.words = load_words("titlewords.txt")
 
     def get_link_features(self, link):
-        return {"title-" + w: re.search(r"\b"+w+r"\b", link.title.lower()) is not None for w in self.words}
+        features = {"title-" + w: re.search(r"\b"+w+r"\b", link.title.lower()) is not None for w in self.words}
+
+        try:
+            features["source"] = link.source.source
+        except AttributeError:
+            features["source"] = None
+
+        return features
 
 
 class LinkClassifier:
