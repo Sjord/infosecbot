@@ -11,9 +11,6 @@ def parse_title(soup):
     title = re.sub(r"\s+", " ", title)
     return title
 
-def retrieve_title(url):
-    return parse_title(webclient.get(url).content)
-
 def parse_canonical(soup):
     canonical_tag = soup.select_one("link[rel='canonical']")
     if canonical_tag is None:

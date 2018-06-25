@@ -22,8 +22,10 @@ def gather_urls(reddits=None, sort=None):
     children = [c['data'] for c in links['data']['children']]
     for c in children:
         if not c['is_self']:
-            title = unescape(c["title"])
-            yield Link(c['url'], title, Source("reddit", c["id"]))
+            try:
+                yield Link.from_url(c['url'], Source("reddit", c["id"]))
+            except Exception as e:
+                print(c["url"], e)
 
 
 if __name__ == "__main__":

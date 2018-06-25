@@ -2,6 +2,7 @@
 from urllib.parse import urlparse
 import hashlib
 from datetime import datetime, timezone
+from infosecbot.webpage import retrieve
 
 
 def hash_url(url):
@@ -17,14 +18,10 @@ class Source:
         return self.__dict__
 
 class Link:
-    def __init__(self, url, title, source):
+    def __init__(self, url, source):
         if not url:
             raise ValueError("empty url")
 
-        if not title:
-            raise ValueError("empty title")
-
-        self.title = title
         self.url = url
         self.source = source
         self.id = hash_url(url)
@@ -39,15 +36,27 @@ class Link:
         if self.domain is None:
             raise ValueError("invalid url")
 
+    @classmethod
+    def from_url(cls, url, source):
+        if url.endswith(".pdf"):
+            raise ValueError("PDF")
+
+        webpage = retrieve(url)
+        self = cls(webpage.url, source)
+        self.title = webpage.title
+        self.description = webpage.description
+        return self
 
     @classmethod
     def unserialize(cls, data):
-        self = cls(data['url'], data['title'], data.get('source'))
+        self = cls(data['url'], data['source'])
+        self.title = data['title']
         self.id = data['id']
         self.score = data['score']
         self.learned_at_score = data['learned_at_score']
         self.domain = data['domain']
         self.created = data.get('created')
+        self.description = data.get('description')
         if self.created is not None:
             self.created = datetime.fromtimestamp(self.created, timezone.utc)
         return self
