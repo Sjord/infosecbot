@@ -1,4 +1,5 @@
 0day
+access
 accidentally
 accounts
 ad
@@ -25,7 +26,7 @@ audit
 auditor
 authentication
 auto
-backdoor
+backdoor(ed)?
 bartblaze
 based
 biggest
@@ -84,9 +85,9 @@ cross
 crypto
 cryptograph(ic|y)
 csp
-csrf
 current
 cve
+[cx]srf
 cyber
 cyberattacks?
 cybersecurity
@@ -115,8 +116,7 @@ double
 dynamic
 edge
 electron
-email
-emails
+emails?
 embedded
 encrypt(ed|ion)?
 engine
@@ -158,11 +158,9 @@ getting
 github
 google
 grammarly
-hack
-hacked
+hack(ed|ing)?
 hackers?
-hacking
-hardcoded
+hardcoded?
 hash(es)?
 have
 header
@@ -289,8 +287,7 @@ ransomware
 rar
 rather
 rce
-read
-reading
+read(ing)?
 records?
 recovery
 redirect
@@ -415,7 +412,6 @@ wins
 work
 world
 write
-writeups?
 writing
 x0rz
 xor
