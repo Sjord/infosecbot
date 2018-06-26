@@ -1,6 +1,7 @@
 from infosecbot.webclient import webclient
 from bs4 import BeautifulSoup
 import re
+from urllib.parse import urljoin
 
 class Webpage:
     def __str__(self):
@@ -32,7 +33,7 @@ def retrieve(url):
     result = Webpage()
     result.title = parse_title(soup)
     result.description = parse_description(soup)
-    result.url = parse_canonical(soup) or response.url
+    result.url = urljoin(response.url, parse_canonical(soup))
     return result
 
 
