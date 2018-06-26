@@ -50,7 +50,7 @@ class Link:
         self.scheme = parsed_url.scheme
 
         if self.domain is None:
-            raise ValueError("invalid url")
+            raise ValueError("invalid url: '%s'" % self.url)
 
     @classmethod
     def from_url(cls, url, source):
