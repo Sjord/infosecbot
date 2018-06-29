@@ -34,6 +34,8 @@ blacklist = Blacklist()
 
 
 class Link:
+    date_fields = ['created', 'published']
+
     def __init__(self, url, source):
         if not url:
             raise ValueError("empty url")
@@ -44,6 +46,7 @@ class Link:
         self.score = 0
         self.learned_at_score = None
         self.created = datetime.now(timezone.utc)
+        self.published = None
 
         parsed_url = urlparse(self.url)
         self.domain = parsed_url.hostname
@@ -68,6 +71,7 @@ class Link:
         self = cls(webpage.url, source)
         self.title = webpage.title
         self.description = webpage.description
+        self.published = webpage.date
         return self
 
     @classmethod
@@ -79,20 +83,23 @@ class Link:
         self.learned_at_score = data['learned_at_score']
         self.domain = data['domain']
         self.created = data.get('created')
+        self.published = data.get('published')
         self.description = data.get('description')
 
         source_dict = data.get('source')
         if source_dict is not None:
             self.source = Source(source_dict['source'], source_dict['id'])
 
-        if self.created is not None:
-            self.created = datetime.fromtimestamp(self.created, timezone.utc)
+        for field_name in self.date_fields:
+            if getattr(self, field_name) is not None:
+                setattr(self, field_name, datetime.fromtimestamp(getattr(self, field_name), timezone.utc))
         return self
 
     def serialize(self):
         result = self.__dict__
-        if result['created'] is not None:
-            result['created'] = result['created'].timestamp()
+        for field_name in self.date_fields:
+            if result[field_name] is not None:
+                result[field_name] = result[field_name].timestamp()
         return result
     
     def __str__(self):
