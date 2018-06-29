@@ -38,7 +38,9 @@ def handle_new_links(links):
     if not links:
         return
 
-    link = max(links, key = lambda l: l.infosec_probability)
+    recent_links = [l for l in links if l.is_recent()]
+
+    link = max(recent_links, key = lambda l: l.infosec_probability)
     api = get_tweepy_api()
     api.update_status(str(link))
 
