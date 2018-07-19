@@ -7,10 +7,20 @@ class Webpage:
     def __str__(self):
         return str(self.__dict__)
 
-def parse_title(soup):
+def parse_title_from_meta(soup):
+    meta = soup.select_one("meta[property='og:title']") \
+        or soup.select_one("meta[name='twitter:title']")
+    if meta is None:
+        return None
+    return meta.attrs.get("content")
+
+def parse_title_from_tag(soup):
     title = soup.title.get_text(strip=True)
     title = re.sub(r"\s+", " ", title)
     return title
+
+def parse_title(soup):
+    return parse_title_from_meta(soup) or parse_title_from_tag(soup)
 
 def parse_canonical(soup):
     canonical_tag = soup.select_one("link[rel='canonical']")
