@@ -54,7 +54,12 @@ def guess_year(url):
     return None
 
 
-def search_date(html):
+def search_url_date(url):
+    matches = re.findall(r'20[0-9/-]+', url)
+    return max(matches)
+
+
+def search_html_date(html):
     m = re.search(b"(20[0123]\d-[01]\d-[0123]\d)(T|\b)", html)
     if m:
         return m.group(1).decode()
@@ -66,13 +71,13 @@ def parse_date(url, html, soup):
     if date_str:
         return dateparser.parse(date_str)
 
-    date_str = search_date(html)
+    date_str = search_html_date(html)
     if date_str:
         return dateparser.parse(date_str)
 
-    year = guess_year(url)
-    if year:
-        return date(year, 1, 1)
+    date_str = search_url_date(url)
+    if date_str:
+        return dateparser.parse(date_str)
 
     return None
 
