@@ -3,3 +3,4 @@ tweepy
 nltk
 cherrypy
 beautifulsoup4
+dateparser
