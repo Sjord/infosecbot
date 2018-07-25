@@ -66,7 +66,7 @@ def guess_year(url):
 
 def search_url_date(url):
     matches = re.findall(r'20[0-9/-]+', url)
-    return max(matches)
+    return max(matches, default=None)
 
 
 def search_html_date(html):
