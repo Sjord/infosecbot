@@ -106,4 +106,4 @@ class Link:
         return "%s %s" % (self.title, self.url)
 
     def is_recent(self):
-        return self.published is None or self.published.year == date.today().year
+        return self.published is None or self.published.year == datetime.today().year
