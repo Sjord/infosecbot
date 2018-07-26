@@ -96,7 +96,7 @@ class Link:
         return self
 
     def serialize(self):
-        result = self.__dict__
+        result = self.__dict__.copy()
         for field_name in self.date_fields:
             if result[field_name] is not None:
                 result[field_name] = result[field_name].timestamp()
