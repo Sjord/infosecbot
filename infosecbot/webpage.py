@@ -79,15 +79,15 @@ def search_html_date(html):
 def parse_date(url, html, soup):
     date_str = parse_date_str(soup)
     if date_str:
-        return dateparser.parse(date_str)
+        return dateparser.parse(date_str, settings={'TIMEZONE': 'UTC'})
 
     date_str = search_html_date(html)
     if date_str:
-        return dateparser.parse(date_str)
+        return dateparser.parse(date_str, settings={'TIMEZONE': 'UTC'})
 
     date_str = search_url_date(url)
     if date_str:
-        return dateparser.parse(date_str)
+        return dateparser.parse(date_str, settings={'TIMEZONE': 'UTC'})
 
     return None
 

@@ -40,6 +40,8 @@ storage = Storage()
 
 if __name__ == "__main__":
     s = Storage()
-    s['test'] = 1
+    links = s['links']
     s.save()
-    print(s)
+    for l in links:
+        if l.published is not None:
+            print(l, l.published)
