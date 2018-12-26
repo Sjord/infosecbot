@@ -1,6 +1,7 @@
 import infosecbot.provider.reddit as reddit
 import infosecbot.provider.hackernews as hackernews
 import infosecbot.provider.twitter as twitter
+import infosecbot.provider.sjoerdlangkemper as sjoerdlangkemper
 from infosecbot.classifier import LinkClassifier
 from infosecbot.storage import storage
 from infosecbot.lockfile import LockFile
@@ -21,7 +22,7 @@ class SeenIt:
 
 
 def collect_links():
-    providers = [reddit, hackernews, twitter]
+    providers = [reddit, hackernews, twitter, sjoerdlangkemper]
     seenit = SeenIt()
 
     for p in providers:
