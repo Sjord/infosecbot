@@ -5,6 +5,7 @@ import infosecbot.provider.sjoerdlangkemper as sjoerdlangkemper
 from infosecbot.classifier import LinkClassifier
 from infosecbot.storage import storage
 from infosecbot.lockfile import LockFile
+from infosecbot.timeout import Timeout
 from random import randrange
 import sys
 
@@ -52,20 +53,21 @@ def is_probably_infosec(link):
 
 
 if __name__ == "__main__":
-    with LockFile():
-        new_links = []
-        classifier = LinkClassifier()
+    with Timeout(1200):
+        with LockFile():
+            new_links = []
+            classifier = LinkClassifier()
 
-        try:
-            for l in collect_links():
-                l.infosec_probability = classifier.classify(l)
-                voted = autovote(l)
-                if voted or is_probably_infosec(l):
-                    storage["links"].append(l)
-                    if is_probably_infosec(l):
-                        new_links.append(l)
-        finally:
-            storage.save()
+            try:
+                for l in collect_links():
+                    l.infosec_probability = classifier.classify(l)
+                    voted = autovote(l)
+                    if voted or is_probably_infosec(l):
+                        storage["links"].append(l)
+                        if is_probably_infosec(l):
+                            new_links.append(l)
+            finally:
+                storage.save()
 
-        if "tweet" in sys.argv:
-            twitter.handle_new_links(new_links)
+            if "tweet" in sys.argv:
+                twitter.handle_new_links(new_links)
