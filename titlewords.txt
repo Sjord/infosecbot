@@ -6,8 +6,6 @@ bypass(ing)?
 hack(ed|ing)?
 i
 is
-medium
 security
 vulnerabilit(y|ies)
 write
-xss
