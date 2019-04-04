@@ -1,11 +1,11 @@
 blogs?
-bounty
-bugbounty
 bugs?
-bypass(ing)?
+bypass(ed|ing)?
+expos(e|ed|es|ures?|ing)
 hack(ed|ing)?
 i
 is
+not
+remote
 security
 vulnerabilit(y|ies)
-write
