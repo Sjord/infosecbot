@@ -55,8 +55,9 @@ def is_probably_infosec(link):
 if __name__ == "__main__":
     with Timeout(1200):
         with LockFile():
-            new_links = []
+            twitter.update_retweet_votes()
             classifier = LinkClassifier()
+            new_links = []
 
             try:
                 for l in collect_links():
