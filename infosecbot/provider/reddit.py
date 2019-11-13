@@ -3,7 +3,7 @@ from infosecbot.storage import storage
 from infosecbot.model import Link, Source
 from html import unescape
 
-default_reddits = ["crypto", "netsec", "redteamsec", "security"]
+default_reddits = ["crypto", "netsec", "redteamsec", "websecurityresearch"]
 default_sort = "new"
 
 
