@@ -33,21 +33,6 @@ def collect_links():
                 yield (link)
 
 
-def autovote(link):
-    prob = link.infosec_probability
-    assert prob
-
-    if prob > 0.999:
-        link.score += 1
-        return True
-
-    if prob < 0.001 and randrange(100) == 0:
-        link.score -= 1
-        return True
-
-    return False
-
-
 def is_probably_infosec(link):
     return link.infosec_probability > 0.9
 
@@ -62,8 +47,7 @@ if __name__ == "__main__":
             try:
                 for l in collect_links():
                     l.infosec_probability = classifier.classify(l)
-                    voted = autovote(l)
-                    if voted or is_probably_infosec(l):
+                    if is_probably_infosec(l):
                         storage["links"].append(l)
                         if is_probably_infosec(l):
                             new_links.append(l)
