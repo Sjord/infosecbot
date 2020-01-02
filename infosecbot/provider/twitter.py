@@ -51,13 +51,15 @@ def handle_new_links(links):
 
 def update_retweet_votes():
     api = get_tweepy_api()
-    for t in api.retweets_of_me(count=3):
+    for t in api.user_timeline():
         urls = [u["expanded_url"] for u in t.entities["urls"]]
         if urls:
             url = urls[0]
             link = storage.find_link_by_url(url)
-            if link and link.score >= 0 and link.score < t.retweet_count:
-                link.score = t.retweet_count
+            if link:
+                t_score = t.retweet_count + t.favorite_count
+                if link.score >= 0 and link.score < t_score:
+                    link.score = t_score
 
 
 if __name__ == "__main__":
