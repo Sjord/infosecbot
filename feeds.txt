@@ -1,4 +1,5 @@
 https://blog.scrt.ch/feed/
 https://cryptologie.net/feed/index/html
+https://research.securitum.com/feed/
 https://textslashplain.com/feed/
 https://www.sjoerdlangkemper.nl/feed.xml
