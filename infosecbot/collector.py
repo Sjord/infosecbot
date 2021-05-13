@@ -48,6 +48,7 @@ if __name__ == "__main__":
                 for l in collect_links():
                     l.infosec_probability = classifier.classify(l)
                     if is_probably_infosec(l):
+                        print(f"Found infosec link: {l}")
                         storage["links"].append(l)
                         new_links.append(l)
             finally:
