@@ -26,16 +26,14 @@ def get_tweepy_api():
 def gather_urls():
     api = get_tweepy_api()
     public_tweets = api.home_timeline(tweet_mode="extended")
-    links = []
     for t in public_tweets:
         for url in [u["expanded_url"] for u in t.entities["urls"]]:
             try:
                 link = Link.from_url(url, Source("twitter", t.id))
                 if not is_twitter_url(link.url):
-                    links.append(link)
+                    yield link
             except Exception as e:
                 print(url, e)
-    return links
 
 
 def handle_new_links(links):
