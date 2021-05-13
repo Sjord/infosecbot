@@ -49,8 +49,7 @@ if __name__ == "__main__":
                     l.infosec_probability = classifier.classify(l)
                     if is_probably_infosec(l):
                         storage["links"].append(l)
-                        if is_probably_infosec(l):
-                            new_links.append(l)
+                        new_links.append(l)
             finally:
                 storage.save()
 
