@@ -6,3 +6,4 @@ https://www.sjoerdlangkemper.nl/feed.xml
 https://www.gabriel.urdhr.fr/tags/security/feed.atom
 https://jub0bs.com/posts/index.xml
 https://improsec.com/tech-blog?format=rss
+https://www.securify.nl/rss/blogs.xml
