@@ -23,7 +23,7 @@ class SeenIt:
 
 
 def collect_links():
-    providers = [reddit, hackernews, twitter, rss]
+    providers = [reddit, hackernews, rss]
     seenit = SeenIt()
 
     for p in providers:
